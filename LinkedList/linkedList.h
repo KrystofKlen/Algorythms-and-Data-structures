@@ -13,6 +13,7 @@ int listIsEmpty(LinkedList* pLinkedList);
 
 /**
  * Adds a new Node to the front (head) of the linked list.
+ * If parameter == NULL the function returns 1 (is empty)
  */
 void listPushFront(LinkedList** pLinkedList, Node* pNewNode);
 
@@ -96,3 +97,33 @@ void nodeDelete(LinkedList** pLinkedList, Node* pNodeToDelete);
  * Swaps 2 elements in the Linked List without creating new Nodes.
  */
 void listSwap(LinkedList** pLinkedList, Node* pNode1, Node* pNode2);
+
+/**
+ * Merges 2 sorted linked lists into a single sorted linked list.
+ * 
+ * Parameters: 
+ * pLinkedList1, pLinkedList2 = double pointers to two sorted linked lists
+ * pMergedLinkedList = double pointer to linked list
+ * int (nodeCompare) (Node* pNode1, Node* pNode2) = pointer to a function returning a number higher than 0 if pNode1 is greater than pNode2,
+ *  smaller than 0 if pNode2 higher than pNode1, 0 if they are the same.
+ * 
+ * Important:
+ * 1) If both pLinkedList1 and pLinkedList2 are empty (function listIsEmpty returns 1), then Head and Tail of pMergedLinkedList are set to NULL.
+ * 2) If only pLinkedList1 (function listIsEmpty returns 1), then then Head and Tail of pMergedLinkedList are set Head and Tail of pLinkedList2.
+ * 3) If only pLinkedList2 (function listIsEmpty returns 1), then then Head and Tail of pMergedLinkedList are set Head and Tail of pLinkedList1.
+ * 4) Head and Tail of pLinkedList1 and pLinkedList2 will remain unchanged.
+ * 5) If pMergedLinkedList is not empty (function listIsEmpty returns 1), then the previous content of pMergedLinkedList is deleted.
+ * 6) NO COPY IS CREATED!
+ * ----------------------------------------------------------
+ * Example:
+ * Before:
+ * pLinkedList1: 1 (Head) -> 5 -> 6 -> 7 -> 20 -> 21 (Tail)
+ * pLinkedList2: 3 (Head) -> 4 -> 7 -> 27(Tail);
+ * pMergedLinkedList Head == Tail == NULL
+ * ----------------------------------------------------------
+ * After:
+ * pLinkedList1: 1 (Head) -> 5 -> 6 -> 7 -> 20 -> 21 (Tail)
+ * pLinkedList2: 3 (Head) -> 4 -> 7 -> 27(Tail);
+ * pMergedLinkedList 1(Head of pMergedLinkedList, Head of pLinkedList1) -> 3 -> 4 (Head of pLinkedList2) -> 5 -> 6 -> 7 -> 7 -> 20 -> 21 (Tail of pLinkedList1) -> 27(Tail of pMergedLinkedList, Tail of pLinkedList2)
+ */
+void merge2SortedLinkedLists(LinkedList** pLinkedList1, LinkedList** pLinkedList2, LinkedList** pMergedLinkedList, int (nodeCompare) (Node*, Node*) );

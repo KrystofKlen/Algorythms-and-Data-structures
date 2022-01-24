@@ -7,6 +7,7 @@ void listInit(LinkedList** pLinkedList){
 }
 
 int listIsEmpty(LinkedList* pLinkedList){
+    if(!pLinkedList) return 1;
     if(pLinkedList -> mHead == NULL) return 1;
     else return 0;
 }
@@ -347,3 +348,74 @@ void listSwap(LinkedList** pLinkedList, Node* pNode1, Node* pNode2){
     return;
 }
 
+
+Node* recursiveMerge(Node* pCurrentNodeFrom1, Node* pCurrentNodeFrom2, int (nodeCompare) (Node*, Node*)){
+    if(!pCurrentNodeFrom1) return pCurrentNodeFrom2;
+    if(!pCurrentNodeFrom2) return pCurrentNodeFrom1;
+
+    int result = nodeCompare( pCurrentNodeFrom1, pCurrentNodeFrom2);
+
+    //Node from 1 bigger than Node from 2 or they are same
+    if(result >= 0){
+        pCurrentNodeFrom2 -> mNext = recursiveMerge(pCurrentNodeFrom1, pCurrentNodeFrom2 ->mNext, nodeCompare);
+        return pCurrentNodeFrom2 ;
+    }
+    //Node from 2 bigger than Node from 1
+    else{
+        pCurrentNodeFrom1 -> mNext = recursiveMerge(pCurrentNodeFrom1 -> mNext, pCurrentNodeFrom2, nodeCompare);
+        return pCurrentNodeFrom1;
+    }
+}
+
+void merge2SortedLinkedLists(LinkedList** pLinkedList1, LinkedList** pLinkedList2, LinkedList** pMergedLinkedList, int (nodeCompare) (Node*, Node*) ){
+    
+    if(!listIsEmpty(*pMergedLinkedList)){
+        listDelete(pMergedLinkedList);
+    }
+    if(!pLinkedList1 && pLinkedList2){
+        (*pMergedLinkedList) -> mHead = (*pLinkedList2) -> mHead;
+        (*pMergedLinkedList) -> mTail = (*pLinkedList2) -> mTail;
+        return;
+    }
+    if(pLinkedList1 && !pLinkedList2){
+        (*pMergedLinkedList) -> mHead = (*pLinkedList1) -> mHead;
+        (*pMergedLinkedList) -> mTail = (*pLinkedList1) -> mTail;
+        return;
+    }
+    if(!pLinkedList1 && !pLinkedList2){
+        listInit(pMergedLinkedList);
+        return;
+    }
+    int list1IsEmpty = listIsEmpty(*pLinkedList1);
+    int list2IsEmpty = listIsEmpty(*pLinkedList2);
+    if(list1IsEmpty && list2IsEmpty){
+        listInit(pMergedLinkedList);
+        return;
+    }else if(list1IsEmpty && !list2IsEmpty){
+        (*pMergedLinkedList) -> mHead = (*pLinkedList2) -> mHead;
+        (*pMergedLinkedList) -> mTail = (*pLinkedList2) -> mTail;
+        return;
+    }else if(!list1IsEmpty && list2IsEmpty){
+        (*pMergedLinkedList) -> mHead = (*pLinkedList1) -> mHead;
+        (*pMergedLinkedList) -> mTail = (*pLinkedList1) -> mTail;
+        return;
+    }
+
+    Node* pCurrentNodeFrom1 = (*pLinkedList1) -> mHead;
+    Node* pCurrentNodeFrom2 =(*pLinkedList2) -> mHead;
+
+    recursiveMerge(pCurrentNodeFrom1, pCurrentNodeFrom2, nodeCompare);
+
+    int resultHead = nodeCompare((*pLinkedList1) -> mHead, (*pLinkedList2) -> mHead);
+    if(resultHead >= 0){
+        (*pMergedLinkedList) -> mHead = (*pLinkedList2) -> mHead;
+    }else{
+        (*pMergedLinkedList) -> mHead = (*pLinkedList1) -> mHead;
+    }
+    int resultTail = nodeCompare((*pLinkedList1) -> mTail, (*pLinkedList2) -> mTail);
+    if(resultTail >= 0){
+        (*pMergedLinkedList) -> mTail = (*pLinkedList1) -> mTail;
+    }else{
+        (*pMergedLinkedList) -> mTail = (*pLinkedList2) -> mTail;
+    }
+}
