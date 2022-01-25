@@ -93,6 +93,7 @@ void listDelete(LinkedList** pLinkedList);
  * pLinkedList remains unchanged if pNodeToDe == NULL or pNodeTodelete is not in pLinkedList
  */
 void nodeDelete(LinkedList** pLinkedList, Node* pNodeToDelete);
+
 /**
  * Swaps 2 elements in the Linked List without creating new Nodes.
  */
@@ -148,7 +149,7 @@ int getListLength(LinkedList* pLinkedList);
 Node* getListNodeAtNthIndex(LinkedList* pLinkedList, int n);
 
 /**
- * Sorts given Linked List using merge sort algorythm.
+ * Sorts given Linked List using merge sort algorithm.
  * Parameters:
  * pLinkedList = Linked List to sort
  * int (nodeCompare) (Node* pNode1, Node* pNode2) = pointer to a function returning a number higher than 0 if pNode1 is greater than pNode2,
