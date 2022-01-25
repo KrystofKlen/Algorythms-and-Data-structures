@@ -348,7 +348,6 @@ void listSwap(LinkedList** pLinkedList, Node* pNode1, Node* pNode2){
     return;
 }
 
-
 Node* recursiveMerge(Node* pCurrentNodeFrom1, Node* pCurrentNodeFrom2, int (nodeCompare) (Node*, Node*)){
     if(!pCurrentNodeFrom1) return pCurrentNodeFrom2;
     if(!pCurrentNodeFrom2) return pCurrentNodeFrom1;
@@ -418,4 +417,83 @@ void merge2SortedLinkedLists(LinkedList** pLinkedList1, LinkedList** pLinkedList
     }else{
         (*pMergedLinkedList) -> mTail = (*pLinkedList2) -> mTail;
     }
+}
+
+
+int getListLength(LinkedList* pLinkedList){
+    int len = 0;
+    Node* tmp = pLinkedList -> mHead;
+    while(tmp){
+        len++;
+        tmp = tmp -> mNext;
+    }
+    return len;
+}
+
+Node* getListNodeAtNthIndex(LinkedList* pLinkedList, int n){
+    Node* pNodeAtNthIndex = pLinkedList -> mHead;
+    int index = 0;
+    while(pNodeAtNthIndex){
+        if(index == n) return pNodeAtNthIndex;
+        pNodeAtNthIndex = pNodeAtNthIndex -> mNext;
+        index++;
+    }
+    return NULL;
+}
+
+// This function is used for mergeSort
+Node* merge(Node* pNodeLeft, Node* pNodeRight, int (nodeCompare) (Node*, Node*)){
+    if(!pNodeLeft) return pNodeRight;
+    if(!pNodeRight) return pNodeLeft;
+
+    int result = nodeCompare(pNodeLeft, pNodeRight);
+    if(result >= 0){
+        pNodeRight -> mNext = merge(pNodeLeft, pNodeRight -> mNext, nodeCompare);
+        return pNodeRight;
+    }else{
+        pNodeLeft -> mNext = merge(pNodeLeft -> mNext, pNodeRight, nodeCompare);
+        return pNodeLeft;
+    }
+}
+
+Node* getNodeAtNthIndex(Node* pNode, int n){
+    int index = 0;
+    while(pNode){
+        if(index == n) return pNode;
+        pNode = pNode -> mNext;
+        index++;
+    }
+    return NULL;
+}
+
+Node* mergeSort(Node* pHeadOfListToSort, int listLen, int (nodeCompare) (Node*, Node*)){
+    
+    if(!pHeadOfListToSort -> mNext) return pHeadOfListToSort;
+    int mid = listLen / 2;
+
+    //Split Linked List into 2 Linked lists
+    Node* pMidNode = getNodeAtNthIndex(pHeadOfListToSort, mid - 1);
+    Node* pHeadLeft = pHeadOfListToSort;
+    Node* pHeadRight = pMidNode -> mNext;
+
+    //cut off the connection between the 2 Linked Lists -> Now we have 2 Linked Lists
+    pMidNode -> mNext = NULL;
+
+    //Break down the Linked Lists until there is just a single Node within a Linked List.
+    //Heads of lists have to be changed.
+    pHeadLeft = mergeSort(pHeadLeft, mid, nodeCompare);
+    pHeadRight = mergeSort(pHeadRight, listLen - mid, nodeCompare);
+
+    //Mergin Nodes back together
+    pHeadLeft = merge(pHeadLeft, pHeadRight, nodeCompare);
+    
+    //Returning the newHead of the sorted Linked List.
+    return pHeadLeft;
+}
+
+void listMergeSort(LinkedList** pLinkedList, int (nodeCompare) (Node*, Node*)){
+    int listLen = getListLength(*pLinkedList);
+    if(listLen == 0) return;
+    (*pLinkedList) -> mHead  = mergeSort((*pLinkedList) -> mHead, listLen, nodeCompare);
+    (*pLinkedList) -> mTail = getListNodeAtNthIndex(*pLinkedList, listLen - 1);
 }

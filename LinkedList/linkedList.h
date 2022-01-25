@@ -127,3 +127,31 @@ void listSwap(LinkedList** pLinkedList, Node* pNode1, Node* pNode2);
  * pMergedLinkedList 1(Head of pMergedLinkedList, Head of pLinkedList1) -> 3 -> 4 (Head of pLinkedList2) -> 5 -> 6 -> 7 -> 7 -> 20 -> 21 (Tail of pLinkedList1) -> 27(Tail of pMergedLinkedList, Tail of pLinkedList2)
  */
 void merge2SortedLinkedLists(LinkedList** pLinkedList1, LinkedList** pLinkedList2, LinkedList** pMergedLinkedList, int (nodeCompare) (Node*, Node*) );
+
+/**
+ * Returns the Length index of the given Linked list. 
+ * Example:
+ * 1 (Head) -> 2 -> 3 -> 4(Tail) .... length = 4;
+ */
+int getListLength(LinkedList* pLinkedList);
+
+/**
+ * Returns a pointer to the Node which is at Nth index at the given Linked list. NULL if n > max index of the Linked list.
+ * -----------------------------------------------------------------
+ * Example:
+ * 1(Head) -> 2 -> 3 -> 4(Tail)
+ * 2 == getListNodeAtNthIndex(LinkedList* pLinkedList, 1);
+ * 1(Head) == getListNodeAtNthIndex(LinkedList* pLinkedList, 0);
+ * NULL == getListNodeAtNthIndex(LinkedList* pLinkedList, 300);
+ * -----------------------------------------------------------------
+ */
+Node* getListNodeAtNthIndex(LinkedList* pLinkedList, int n);
+
+/**
+ * Sorts given Linked List using merge sort algorythm.
+ * Parameters:
+ * pLinkedList = Linked List to sort
+ * int (nodeCompare) (Node* pNode1, Node* pNode2) = pointer to a function returning a number higher than 0 if pNode1 is greater than pNode2,
+ *  smaller than 0 if pNode2 higher than pNode1, 0 if they are the same.
+ */
+void listMergeSort(LinkedList** pLinkedList, int (nodeCompare) (Node*, Node*));
